@@ -28,7 +28,7 @@ After installing a **compatible** _JRE_ simply launch _SQL Developer Command-Lin
 
 ##### [Version 0.1.0](https://github.com/lazarusllong/sqlcl-package/releases/tag/0.1.0):
 - **changelog:**
-  - Initial Release (Closes: #[ITP], #[SQLCLITP])
+  - Initial Release (Closes: [**#882113**](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=882113), [**#882115**](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=882115))
   - Due to a conflicting name with content of package [_`parallel`_](http://packages.debian.org/search?searchon=names&exact=1&suite=all&section=all&keywords=parallel) the upstream binary `sql` will be renamed. Multiple versions can coexist so `sql.[`_`upstream version`_`]` will invoke a specific version of _Oracle SQL Developer Command-Line_, while `sqlcl` (**the recommended way**) and `sql.standalone` take advantage of _Debian_'s `alternatives` system and, when left in auto mode, will always invoke the highest version installed. 
 
 - **downloads:**
