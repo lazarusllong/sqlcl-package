@@ -1,0 +1,11 @@
+sqlcl-package (0.1.0) unstable; urgency=low
+
+  * Initial Release (Closes: #882113, #882115)
+  * Due to a conflicting name with content of package "parallel" the upstream
+    binary "sql" will be renamed. Multiple versions can coexist so
+    "sql.[upstream version]" will invoke a specific version of Oracle SQL
+    Developer Command-Line, while "sqlcl" (the recommended way) and
+    "sql.standalone" take advantage of Debian's alternatives system and, when
+    left in auto mode, will always invoke the highest version installed.
+
+ -- Lazarus Long <lazarus.long@sapo.pt>  Sun, 19 Nov 2017 00:01:00 +0000

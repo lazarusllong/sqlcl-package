@@ -1,0 +1,26 @@
+The Debian Package sqlcl-package
+--------------------------------
+
+In order to run Oracle SQL Developer Command-Line you'll need a working JRE.
+The minimum JRE you should use is 1.8 (JRE8.0).
+
+There are several ways to obtain a compatible JRE:
+
+- install default-jre (java), making sure it depends, at least, on the minimum
+  required JRE version
+- install one of the required openjdk-8-jre or openjdk-9-jre (java)
+- install the meta-package java-runtime, making sure that it installs, at
+  least, the minimum required JRE version as dependency
+- install one of the meta-packages java8-runtime or java9-runtime, making sure
+  that it installs, at least, the minimum required JRE version as dependency
+- download and run the installer for the version you wish to install from
+  Oracle <http://www.oracle.com/technetwork/java/javase/downloads/>
+- install java-package (contrib/misc) and generate a Debian package from the
+  above installer
+
+After installing a compatible JRE simply launch SQL Developer Command-Line by
+invoking either "sqlcl" (the recommended way), "sql.standalone" or
+"sql.[upstream version]".  The JRE will be automatically detected and used as
+long as properly installed.
+
+ -- Lazarus Long <lazarus.long@sapo.pt>  Sun, 19 Nov 2017 00:01:00 +0000
