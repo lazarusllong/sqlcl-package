@@ -19,8 +19,8 @@ There are several ways to obtain a compatible JRE:
   above installer
 
 After installing a compatible JRE simply launch SQL Developer Command-Line by
-invoking either "sqlcl" (the recommended way), "sql.standalone" or
+invoking either "sqlcl" (the recommended way), "sqlcl.standalone" or
 "sql.[upstream version]".  The JRE will be automatically detected and used as
 long as properly installed.
 
- -- Lazarus Long <lazarus.long@sapo.pt>  Sun, 19 Nov 2017 00:01:00 +0000
+ -- Lazarus Long <lazarus.long@sapo.pt>  Tue, 21 Nov 2017 00:01:00 +0000

@@ -30,5 +30,5 @@ Description: Oracle SQL Developer Command-Line Debian package builder
  binary "sql" will be renamed. Multiple versions can coexist so
  "sql.[upstream version]" will invoke a specific version of Oracle SQL
  Developer Command-Line, while "sqlcl" (the recommended way) and
- "sql.standalone" take advantage of Debian's alternatives system and, when left
- in auto mode, will always invoke the highest version installed.
+ "sqlcl.standalone" take advantage of Debian's alternatives system and, when
+ left in auto mode, will always invoke the highest version installed.
