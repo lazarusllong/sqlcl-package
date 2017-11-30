@@ -1103,6 +1103,7 @@ func_updalt_remove() {
 	if [ \${RET} -ne 0 ] ; then
 		printf "%s prerm - unexpected return code \"%d\"\n" "${INVOCATION}" \${RET} >&2
 		return \${RET}
+	fi
 
 	\${UPDALT} \\
 		\${UPDALT_ACTION} \${UPDALT_MASTER} \${INSTBINDIR}/\${UPDALT_ALT_REAL}
