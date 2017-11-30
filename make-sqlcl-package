@@ -531,7 +531,7 @@ func_reorganize() {
 	${MV} ${MV_OPTS_FUNC_REORG} "${OPTDIR}/${UPSTREAMVER}" "${OPTDIR}/share/${PROGNAME}"
 
 	if [ -f "${OPTDIR}/bin/sql" ] ; then
-		${MV} ${MV_OPTS_FUNC_REORG} "${OPTDIR}/bin/sql" "${OPTDIR}/bin/sql.${UPSTREAMVER}"
+		${MV} ${MV_OPTS_FUNC_REORG} "${OPTDIR}/bin/sql" "${OPTDIR}/bin/sql.${UPSTREAMVER}.standalone"
 	else
 		if [ ${SILENT} -eq 0 ] ; then
 			printf "\nfunc_reorganize(): Original command \"%s\" not found, aborting...\n" "${OPTDIR}/bin/sql" >&2
