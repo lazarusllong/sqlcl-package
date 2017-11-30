@@ -977,7 +977,7 @@ EOF
 		printf "\tdebian/manpages ... "
 	fi
 
-	printf "debian/sql.${UPSTREAMVER}.1\n" >"${DEBIAN_WORKDIR}/manpages"
+	printf "debian/sql.${UPSTREAMVER}.standalone.1\n" >"${DEBIAN_WORKDIR}/manpages"
 
 	if [ ${SILENT} -eq 0 ] ; then
 		printf "done!\n"
@@ -1218,8 +1218,8 @@ There are several ways to obtain a compatible JRE:
   above installer
 
 After installing a compatible JRE simply launch SQL Developer Command-Line
-by invoking either sqlcl or sql.${UPSTREAMVER}.  The JRE will be automatically
-detected and used as long as properly installed.
+by invoking either sqlcl or sql.${UPSTREAMVER}.standalone.  The JRE will be
+automatically detected and used as long as properly installed.
 
  -- Lazarus Long <lazarus.long@sapo.pt>  $(${DATE} ${DATE_OPTS_FUNC_DEB})
 EOF
@@ -1227,12 +1227,12 @@ EOF
 
 	if [ ${SILENT} -eq 0 ] ; then
 		printf "done!\n"
-		printf "\tdebian/sql.${UPSTREAMVER}.1 ... "
+		printf "\tdebian/sql.${UPSTREAMVER}.standalone.1 ... "
 	fi
 
 	(
 	${CAT} <<EOF
-.\\" sql.${UPSTREAMVER}.1
+.\\" sql.${UPSTREAMVER}.standalone.1
 .\\"
 .\\" (2017-11-30)
 .\\"
@@ -1256,16 +1256,16 @@ EOF
 .\\" Debian package builder and installer for Oracle SQL Developer Command-Line
 .\\"
 .\\"
-.TH SQL.${UPSTREAMVER} 1 2017-11-30 Oracle "Oracle SQL Developer Command-Line"
+.TH SQL.${UPSTREAMVER}.STANDALONE 1 2017-11-30 Oracle "Oracle SQL Developer Command-Line"
 .\\"
 .SH NAME
-sql.${UPSTREAMVER} \\- Oracle SQL Developer Command-Line
+sql.${UPSTREAMVER}.standalone \\- Oracle SQL Developer Command-Line
 .\\"
 .SH SYNOPSIS
 .PP
 \\fIUsage 1:\\fP
 .PP
-.B sql.${UPSTREAMVER}
+.B sql.${UPSTREAMVER}.standalone
 .RI -H\\  |\\  -V
 .PP
 .B ${PROGNAME}
@@ -1273,15 +1273,15 @@ sql.${UPSTREAMVER} \\- Oracle SQL Developer Command-Line
 .PP
 \\fIUsage 2:\\fP
 .PP
-.B sql.${UPSTREAMVER}
+.B sql.${UPSTREAMVER}.standalone
 .RI [\\fB<option>\\fP] \\  [{\\fB<logon>\\fP\\  |\\  /nolog}]\\  [\\fB<start>\\fP]
 .PP
 .B ${PROGNAME}
 .RI [\\fB<option>\\fP] \\  [{\\fB<logon>\\fP\\  |\\  /nolog}]\\  [\\fB<start>\\fP]
 .\\"
 .SH DESCRIPTION
-\\fBsql.${UPSTREAMVER}\\fP is a \\fIJava\\fP utility that allows one to develop
-for and administer \\fIOracle\\fP databases.
+\\fBsql.${UPSTREAMVER}.standalone\\fP is a \\fIJava\\fP utility that allows
+one to develop for and administer \\fIOracle\\fP databases.
 .PP
 \\fIOracle SQL Developer Command-Line\\fP (\\fISQLcl\\fP) is a free command
 line interface for \\fIOracle Database\\fP. It allows you to interactively or
@@ -1357,7 +1357,7 @@ connect descriptor.
 \\fBExample\fP: Connect to database using \\fINet Service Name\\fP and the
 database net service name is \\fBORCL\\fP.
 .PP
-\\fBsql.${UPSTREAMVER}\\fP myusername/mypassword@ORCL
+\\fBsql.${UPSTREAMVER}.standalone\\fP myusername/mypassword@ORCL
 .PP
 \\fIHost\\fP specifies the host name or IP address of the database server
 computer.
@@ -1370,7 +1370,7 @@ access.
 \\fBExample\\fP: Connect to database using \\fIEasy Connect\\fP and the Service
 name is \\fBORCL\\fP.
 .PP
-\\fBsql.${UPSTREAMVER}\\fP myusername/mypassword@Host/ORCL
+\\fBsql.${UPSTREAMVER}.standalone\\fP myusername/mypassword@Host/ORCL
 .PP
 The \\fB/NOLOG\\fP option starts \\fISQLcl\\fP without connecting to a database.
 .PP
@@ -1394,7 +1394,7 @@ Refer to the \\fISQLDeveloper User's Guide and Reference\\fP for more informatio
 This manual page was written by \\fILazarus Long <lazarus.long@sapo.pt>\\fP,
 for the Debian project (but may be used by others).
 EOF
-	) >"${DEBIAN_WORKDIR}/sql.${UPSTREAMVER}.1"
+	) >"${DEBIAN_WORKDIR}/sql.${UPSTREAMVER}.standalone.1"
 
 	if [ ${SILENT} -eq 0 ] ; then
 		printf "done!\n"
