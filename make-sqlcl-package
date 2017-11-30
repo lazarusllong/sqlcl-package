@@ -3,7 +3,7 @@ set -e
 
 # make-sqlcl-package
 
-# (2017-11-21)
+# (2017-11-30)
 
 # Copyright © 2017 Lazarus Long <lazarus (dot) long (at) sapo (dot) pt>
 
@@ -80,6 +80,8 @@ CURDIR="${PWD}"
 INVOCATION="$(${BASENAME} "${0}")"
 
 SILENT=0
+
+RM_OPTS_FUNC_TRAP="-rf"
 
 # Cleanup at exit
 #
@@ -272,7 +274,7 @@ func_opts() {
 func_flags() {
 	if [ ${SILENT} -eq 0 ] ; then
 		local COUNT=0
-		printf "Active flags are:"
+		printf "Environment variables are:\n\tDEBFULLNAME=\"%s\"\n\tDEBEMAIL=\"%s\"\nActive flags are:" "${DEBFULLNAME}" "${DEBEMAIL}"
 
 		if [ ${INSTALL} -ne 0 ] ; then
 			COUNT=$((${COUNT} + 1))
@@ -304,7 +306,6 @@ func_flags() {
 func_workdir() {
 	if [ -z "${WORKDIR}" ] ; then
 		local MKTEMP_OPTS_FUNC_WORKDIR="-d"
-		local RM_OPTS_FUNC_WORKDIR="-rf"
 
 		WORKDIR="$(${MKTEMP} ${MKTEMP_OPTS_FUNC_WORKDIR})" || {
 			if [ ${SILENT} -eq 0 ] ; then
@@ -352,7 +353,7 @@ func_workdir() {
 	fi
 
 	if [ ${KEEPDIR} -ne 1 ] ; then
-		trap "${RM} ${RM_OPTS_FUNC_WORKDIR} ${WORKDIR}" EXIT HUP INT TRAP TERM
+		trap "${RM} ${RM_OPTS_FUNC_TRAP} ${WORKDIR}" EXIT HUP INT TRAP TERM
 	fi
 
 	WORKDIR="${WORKDIR}/${PROGNAME}"
@@ -395,7 +396,6 @@ func_extract() {
 		fi
 
 		exit 1
-
 	}
 
 	${UNZIP} ${UNZIP_OPTS_FUNC_EXTRACT}
@@ -508,9 +508,9 @@ func_reorganize() {
 
 	if ! [ -d "${OPTDIR}" ] ; then
 		if [ ${SILENT} -eq 0 ] ; then
-			printf "\nfunc_reorganize(): Directory \"%s\" not found, returning...\n" "${OPTDIR}" >&2
+			printf "\nfunc_reorganize(): Directory \"%s\" not found, aborting...\n" "${OPTDIR}" >&2
 		else
-			printf "%s - func_reorganize(): Directory \"%s\" not found, returning...\n" "${INVOCATION}" "${OPTDIR}" >&2
+			printf "%s - func_reorganize(): Directory \"%s\" not found, aborting...\n" "${INVOCATION}" "${OPTDIR}" >&2
 		fi
 
 		exit 1
@@ -572,9 +572,9 @@ func_cleanup() {
 
 	if ! [ -d "${OPTDIR}" ] ; then
 		if [ ${SILENT} -eq 0 ] ; then
-			printf "func_cleanup(): Directory \"%s\" not found, exiting...\n" "${OPTDIR}" >&2
+			printf "func_cleanup(): Directory \"%s\" not found, aborting...\n" "${OPTDIR}" >&2
 		else
-			printf "%s - func_cleanup(): Directory \"%s\" not found, exiting...\n" "${INVOCATION}" "${OPTDIR}" >&2
+			printf "%s - func_cleanup(): Directory \"%s\" not found, aborting...\n" "${INVOCATION}" "${OPTDIR}" >&2
 		fi
 
 		exit 1
@@ -587,7 +587,7 @@ func_cleanup() {
 	fi
 
 	# Binaries from other OSs
-	${FIND} "${OPTDIR}" ! \( -type d -o -name "*.jar" \) |${XARGS} ${XARGS_OPTS} ${FILE} ${FILE_OPTS} |${GREP} ${GREP_OPTS} "PE32\+ executable|PE32 executable|DOS batch" |${CUT} ${CUT_OPTS_FUNC_CLEAN} |${XARGS} ${XARGS_OPTS} ${RM} ${RM_OPTS_FUNC_CLEAN}
+	${FIND} "${OPTDIR}" ! \( -type d -o -iname "*.jar" \) |${XARGS} ${XARGS_OPTS} ${FILE} ${FILE_OPTS} |${GREP} ${GREP_OPTS} "PE32\+ executable|PE32 executable|DOS batch" |${CUT} ${CUT_OPTS_FUNC_CLEAN} |${XARGS} ${XARGS_OPTS} ${RM} ${RM_OPTS_FUNC_CLEAN}
 	${FIND} "${OPTDIR}" ! -type d \( -iname "*.bat" \) |${XARGS} ${XARGS_OPTS} ${RM} ${RM_OPTS_FUNC_CLEAN}
 
 	if [ ${SILENT} -eq 0 ] ; then
@@ -601,7 +601,7 @@ func_cleanup() {
 	fi
 
 	# Fix path
-	for f in $(${FIND} "${OPTDIR}" ! \( -type d -o -name "*.jar" \) |${XARGS} ${XARGS_OPTS} ${FILE} ${FILE_OPTS} |${GREP} ${GREP_OPTS} "text executable" |${GREP} ${GREP_OPTS} "shell script" |${CUT} ${CUT_OPTS_FUNC_CLEAN} |${SED} ${SED_OPTS} 's/[[:space:]]/#/g') ; do
+	for f in $(${FIND} "${OPTDIR}" ! \( -type d -o -iname "*.jar" \) |${XARGS} ${XARGS_OPTS} ${FILE} ${FILE_OPTS} |${GREP} ${GREP_OPTS} "text executable" |${GREP} ${GREP_OPTS} "shell script" |${CUT} ${CUT_OPTS_FUNC_CLEAN} |${SED} ${SED_OPTS} 's/[[:space:]]/#/g') ; do
 		${SED} ${SED_OPTS_INLINE} "s%_HOME/lib%_HOME/share/${PROGNAME}/${UPSTREAMVER}%g" "$(printf "${f}\n" |${SED} ${SED_OPTS} 's/#/ /g')"
 	done
 
@@ -611,7 +611,7 @@ func_cleanup() {
 
 	# Set executable bit
 	${FIND} "${OPTDIR}" ! -type d -iname "*.jar" |${XARGS} ${XARGS_OPTS} ${CHMOD} ${CHMOD_OPTS_NOEXEC}
-	${FIND} "${OPTDIR}" ! \( -type d -o -name "*.jar" \) |${XARGS} ${XARGS_OPTS} ${FILE} ${FILE_OPTS} |${GREP} ${GREP_OPTS} "text executable" |${GREP} ${GREP_OPTS} "shell script"|${CUT} ${CUT_OPTS_FUNC_CLEAN} |${XARGS} ${XARGS_OPTS} ${CHMOD} ${CHMOD_OPTS_EXEC}
+	${FIND} "${OPTDIR}" ! \( -type d -o -iname "*.jar" \) |${XARGS} ${XARGS_OPTS} ${FILE} ${FILE_OPTS} |${GREP} ${GREP_OPTS} "text executable" |${GREP} ${GREP_OPTS} "shell script"|${CUT} ${CUT_OPTS_FUNC_CLEAN} |${XARGS} ${XARGS_OPTS} ${CHMOD} ${CHMOD_OPTS_EXEC}
 
 	if [ ${SILENT} -eq 0 ] ; then
 		printf " ... done!\n"
@@ -634,9 +634,9 @@ func_debianize() {
 
 	if ! [ -d "${1}" ] ; then
 		if [ ${SILENT} -eq 0 ] ; then
-			printf "func_debianize(): Directory \"%s\" not found, exiting...\n" "${1}" >&2
+			printf "func_debianize(): Directory \"%s\" not found, aborting...\n" "${1}" >&2
 		else
-			printf "%s - func_debianize(): Directory \"%s\" not found, exiting...\n" "${INVOCATION}" "${1}" >&2
+			printf "%s - func_debianize(): Directory \"%s\" not found, aborting...\n" "${INVOCATION}" "${1}" >&2
 		fi
 
 		exit 1
@@ -657,10 +657,17 @@ func_debianize() {
 ${PROGNAME}-${UPSTREAMVER} (${UPSTREAMVER}+${VERSION}-${LOCALVER}) unstable; urgency=low
 
   * Built with ${INVOCATION} ${VERSION} (Closes: #${ITP})
-  * The upstream invocation 'sql' has been changed to 'sql.${UPSTREAMVER}'
-    to avoid conflict with package 'parallel'
-  * To allow multiple versions the alternatives system was used with the master
-    program invoked as 'sqlcl',
+  * The upstream invocation 'sql' has been changed to
+    'sql.${UPSTREAMVER}.standalone' to avoid conflict with package 'parallel'
+  * Since version 4.2 Oracle started to bundle Oracle SQL Developer
+    Command-Line (SQLcl) with Oracle SQL Developer. When available, and as an
+    alternative to the bundled package (see "sqldeveloper-package"),
+    "sql.[upstream version].standalone" will invoke a specific version of
+    SQLcl while "sqlcl.standalone" takes advantage of Debian's alternatives
+    system and, when left in auto mode, will always invoke the highest
+    standalone version installed, and "sqlcl" will invoke the highest version
+    installed (either standalone or bundled, by this order)
+
  -- ${DEBFULLNAME} <${DEBEMAIL}>  $(${DATE} ${DATE_OPTS_FUNC_DEB})
 
 EOF
@@ -692,7 +699,7 @@ Package: ${PROGNAME}-${UPSTREAMVER}
 Architecture: all
 Depends: \${misc:Depends}
 Recommends: java8-runtime | java9-runtime
-Provides: oracle-sql-client-cli, ${PROGNAME}.standalone, ${PROGNAME}
+Provides: oracle-sql-client, oracle-sql-client-cli, ${PROGNAME}.standalone, ${PROGNAME}
 Description: Oracle SQL Developer Command-Line
  Oracle SQL Developer Command-Line (SQLcl) is a free command line interface
  for Oracle Database.  It allows you to interactively or batch execute SQL and
@@ -961,6 +968,7 @@ EOF
         ${CAT} <<EOF
 classpath-contains-relative-path
 missing-manifest
+no-upstream-changelog
 EOF
         ) >"${DEBIAN_WORKDIR}/lintian-overrides"
 
@@ -986,8 +994,9 @@ MANSECTION=1
 COMPRESS=".gz"
 PROG_PRIO=100
 
-UPDALT_MASTER="\${BINNAME}.standalone"
-UPDALT_ALT="\${BINNAME}.${UPSTREAMVER}"
+UPDALT_MASTER="${PROGNAME}.standalone"
+UPDALT_ALT_REAL="\${BINNAME}.${UPSTREAMVER}.standalone"
+UPDALT_ALT_LINK="\${BINNAME}.${UPSTREAMVER}"
 UPDALT_PRIO=$(printf "%02u%02u%02u" ${UPSTREAMVERMAJ} ${UPSTREAMVERMIN} ${UPSTREAMVERREV})
 
 INSTBINDIR="/usr/bin"
@@ -1006,8 +1015,19 @@ func_updalt_install() {
 	local UPDALT_ACTION="--install"
 
 	\${UPDALT} \\
-		\${UPDALT_ACTION} \${INSTBINDIR}/\${UPDALT_MASTER} \${UPDALT_MASTER} \${INSTBINDIR}/\${UPDALT_ALT} \${UPDALT_PRIO} \\
-		\${UPDALT_SLAVE} \${INSTMANDIR}/\${UPDALT_MASTER}.\${MANSECTION}\${COMPRESS} \${UPDALT_MASTER}.\${MANSECTION}\${COMPRESS} \${INSTMANDIR}/\${UPDALT_ALT}.\${MANSECTION}\${COMPRESS}
+		\${UPDALT_ACTION} \${INSTBINDIR}/\${UPDALT_ALT_LINK} \${UPDALT_ALT_LINK} \${INSTBINDIR}/\${UPDALT_ALT_REAL} \${PROG_PRIO} \\
+		\${UPDALT_SLAVE} \${INSTMANDIR}/\${UPDALT_ALT_LINK}.\${MANSECTION}\${COMPRESS} \${UPDALT_AL_LINK}.\${MANSECTION}\${COMPRESS} \${INSTMANDIR}/\${UPDALT_ALT_REAL}.\${MANSECTION}\${COMPRESS}
+
+	RET=\${?}
+
+	if [ \${RET} -ne 0 ] ; then
+		printf "%s postinst - unexpected return code \"%d\"\n" "${INVOCATION}" \${RET} >&2
+		return \${RET}
+	fi
+
+	\${UPDALT} \\
+		\${UPDALT_ACTION} \${INSTBINDIR}/\${UPDALT_MASTER} \${UPDALT_MASTER} \${INSTBINDIR}/\${UPDALT_ALT_REAL} \${UPDALT_PRIO} \\
+		\${UPDALT_SLAVE} \${INSTMANDIR}/\${UPDALT_MASTER}.\${MANSECTION}\${COMPRESS} \${UPDALT_MASTER}.\${MANSECTION}\${COMPRESS} \${INSTMANDIR}/\${UPDALT_ALT_REAL}.\${MANSECTION}\${COMPRESS}
 
 	RET=\${?}
 
@@ -1059,8 +1079,9 @@ set -e
 
 BINNAME="sql"
 
-UPDALT_MASTER="\${BINNAME}.standalone"
-UPDALT_ALT="\${BINNAME}.${UPSTREAMVER}"
+UPDALT_MASTER="${PROGNAME}.standalone"
+UPDALT_ALT_REAL="\${BINNAME}.${UPSTREAMVER}.standalone"
+UPDALT_ALT_LINK="\${BINNAME}.${UPSTREAMVER}"
 
 INSTBINDIR="/usr/bin"
 
@@ -1075,7 +1096,16 @@ func_updalt_remove() {
 	local UPDALT_ACTION="--remove"
 
 	\${UPDALT} \\
-		\${UPDALT_ACTION} \${UPDALT_MASTER} \${INSTBINDIR}/\${UPDALT_ALT}
+		\${UPDALT_ACTION} \${UPDALT_ALT_LINK} \${INSTBINDIR}/\${UPDALT_ALT_REAL}
+
+	RET=\${?}
+
+	if [ \${RET} -ne 0 ] ; then
+		printf "%s prerm - unexpected return code \"%d\"\n" "${INVOCATION}" \${RET} >&2
+		return \${RET}
+
+	\${UPDALT} \\
+		\${UPDALT_ACTION} \${UPDALT_MASTER} \${INSTBINDIR}/\${UPDALT_ALT_REAL}
 
 	RET=\${?}
 
@@ -1152,7 +1182,7 @@ ${PROGNAME}-${UPSTREAMVER} (${UPSTREAMVER}+${VERSION}-${LOCALVER}) unstable; urg
     installed.
 
     To avoid conflicts with package 'parallel', the upstream program name
-    '/usr/bin/sql' has been changed to '/usr/bin/sql.${UPSTREAMVER}'.
+    '/usr/bin/sql' has been changed to '/usr/bin/sql.${UPSTREAMVER}.standalone'.
 
  -- ${DEBFULLNAME} <${DEBEMAIL}>  $(${DATE} ${DATE_OPTS_FUNC_DEB})
 
@@ -1203,7 +1233,7 @@ EOF
 	${CAT} <<EOF
 .\\" sql.${UPSTREAMVER}.1
 .\\"
-.\\" (2017-11-21)
+.\\" (2017-11-30)
 .\\"
 .\\" Copyright © 2017 Lazarus Long <lazarus (dot) long (at) sapo (dot) pt>
 .\\"
@@ -1225,7 +1255,7 @@ EOF
 .\\" Debian package builder and installer for Oracle SQL Developer Command-Line
 .\\"
 .\\"
-.TH SQL.${UPSTREAMVER} 1 2017-11-21 Oracle "Oracle SQL Developer Command-Line"
+.TH SQL.${UPSTREAMVER} 1 2017-11-30 Oracle "Oracle SQL Developer Command-Line"
 .\\"
 .SH NAME
 sql.${UPSTREAMVER} \\- Oracle SQL Developer Command-Line
@@ -1385,14 +1415,14 @@ func_builddeb() {
 	fi
 
 	if [ ${SILENT} -eq 0 ] ; then
-		printf "Building debian package(s) from ${PROGNAME} v%s in \"%s\":\n" "${UPSTREAMVER}" "${CURDIR}"
+		printf "Building debian package(s) from %s v%s in \"%s\":\n" "${PROGNAME}" "${UPSTREAMVER}" "${CURDIR}"
 	fi
 
 	if ! [ -d "${1}/debian" ] ; then
 		if [ ${SILENT} -eq 0 ] ; then
-			printf "func_builddeb(): Directory \"%s/debian\" not found, exiting...\n" "${1}" >&2
+			printf "func_builddeb(): Directory \"%s/debian\" not found, aborting...\n" "${1}" >&2
 		else
-			printf "%s - func_builddeb(): Directory \"%s/debian\" not found, exiting...\n" "${INVOCATION}" "${1}" >&2
+			printf "%s - func_builddeb(): Directory \"%s/debian\" not found, aborting...\n" "${INVOCATION}" "${1}" >&2
 		fi
 
 		exit 1
