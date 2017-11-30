@@ -1273,8 +1273,9 @@ sql.${UPSTREAMVER}.standalone \\- Oracle SQL Developer Command-Line
 .PP
 \\fIUsage 2:\\fP
 .PP
-.B sql.${UPSTREAMVER}.standalone
-.RI [\\fB<option>\\fP] \\  [{\\fB<logon>\\fP\\  |\\  /nolog}]\\  [\\fB<start>\\fP]
+.B sql.${UPSTREAMVER}.standalone \\\\\\\\
+.PP
+.RI 	[\\fB<option>\\fP] \\  [{\\fB<logon>\\fP\\  |\\  /nolog}]\\  [\\fB<start>\\fP]
 .PP
 .B ${PROGNAME}
 .RI [\\fB<option>\\fP] \\  [{\\fB<logon>\\fP\\  |\\  /nolog}]\\  [\\fB<start>\\fP]
