@@ -29,8 +29,7 @@ After installing a **compatible** _JRE_ simply launch _SQL Developer Command-Lin
 ##### [Version 0.1.0](https://github.com/lazarusllong/sqlcl-package/releases/tag/0.1.0):
 - **changelog:**
   - Initial Release (Closes: [**#882113**](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=882113), [**#882115**](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=882115))
-  - Due to a conflicting name with content of package [_`parallel`_](http://packages.debian.org/search?searchon=names&exact=1&suite=all&section=all&keywords=parallel) the upstream binary `sql` will be renamed. Multiple versions can coexist so `sql.[`_`upstream version`_`].standalone` will invoke a specific version of _Oracle SQL Developer Command-Line_, while `sqlcl` (**the recommended way**) and `sqlcl.standalone` take advantage of _Debian_'s `alternatives` system and, when left in auto mode, will always invoke the highest version installed. 
-
+  - Due to a conflicting name with content of package [_`parallel`_](http://packages.debian.org/search?searchon=names&exact=1&suite=all&section=all&keywords=parallel) the upstream binary `sql` will be renamed. Multiple versions can coexist so `sql.[`_`upstream version`_`]` will invoke a specific version of _Oracle SQL Developer Command-Line_, `sql.[upstram version]` will invoke either the _standalone_ or _bundled_ _Oracle SQL Developer Command-Line_ version (in this order), while `sqlcl` (**the recommended way**) and `sqlcl.standalone` take advantage of _Debian_'s `alternatives` system and, when left in auto mode, will always invoke the highest version installed.
 - **downloads:**
   - [**`sqlcl-package_0.1.0_all.deb`**](https://github.com/lazarusllong/sqlcl-package/releases/download/0.1.0/sqlcl-package_0.1.0_all.deb) (_binary package_)
   - [`sqlcl-package_0.1.0.dsc`](https://github.com/lazarusllong/sqlcl-package/releases/download/0.1.0/sqlcl-package_0.1.0.dsc) (_source description file_)
