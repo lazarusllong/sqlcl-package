@@ -20,7 +20,7 @@ There are several ways to obtain a **compatible** _JRE_:
 - download and run the installer for the version you wish to install from _Oracle_ [_&lt;http://www.oracle.com/technetwork/java/javase/downloads/&gt;_](http://www.oracle.com/technetwork/java/javase/downloads/)
 - install [_`java-package`_](http://packages.debian.org/search?searchon=names&exact=1&suite=all&section=all&keywords=java-package) (contrib/misc) and generate a _Debian_ package from the above installer
 
-After installing a **compatible** _JRE_ simply launch _SQL Developer Command-Line_ by invoking either `sqlcl` (**the recommended way**), `sqlcl.standalone` or `sql.[`_`upstream version`_`].standalone`. The _JRE_ will be automatically detected and used as long as properly installed.
+After installing a **compatible** _JRE_ simply launch _SQL Developer Command-Line_ by invoking either `sqlcl` (**the recommended way**), `sqlcl.standalone`, `sql.[`_`upstream version`_`]` or `sql.[`_`upstream version`_`].standalone`. The _JRE_ will be automatically detected and used as long as properly installed.
 
 <hr width="40%">
 
