@@ -3,7 +3,7 @@ set -e
 
 # make-sqlcl-package
 
-# (2017-12-01)
+# (2017-12-17)
 
 # Copyright © 2017 Lazarus Long <lazarus (dot) long (at) sapo (dot) pt>
 
@@ -1236,7 +1236,7 @@ EOF
 	${CAT} <<EOF
 .\\" sql.${UPSTREAMVER}.standalone.1
 .\\"
-.\\" (2017-12-01)
+.\\" (2017-12-17)
 .\\"
 .\\" Copyright © 2017 Lazarus Long <lazarus (dot) long (at) sapo (dot) pt>
 .\\"
@@ -1258,7 +1258,7 @@ EOF
 .\\" Debian package builder and installer for Oracle SQL Developer Command-Line
 .\\"
 .\\"
-.TH SQL.${UPSTREAMVER}.STANDALONE 1 2017-12-01 Oracle "Oracle SQL Developer Command-Line"
+.TH SQL.${UPSTREAMVER}.STANDALONE 1 2017-12-17 Oracle "Oracle SQL Developer Command-Line"
 .\\"
 .SH NAME
 sql.${UPSTREAMVER}.standalone \\- Oracle SQL Developer Command-Line

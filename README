@@ -23,4 +23,4 @@ invoking either "sqlcl" (the recommended way), "sqlcl.standalone",
 "sql.[upstream version]" or "sql.[upstream version].standalone".  The JRE will
 be automatically detected and used as long as properly installed.
 
- -- Lazarus Long <lazarus.long@sapo.pt>  Fri, 01 Dec 2017 00:01:00 +0000
+ -- Lazarus Long <lazarus.long@sapo.pt>  Sun, 17 Dec 2017 00:01:00 +0000
