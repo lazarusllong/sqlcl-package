@@ -1,9 +1,17 @@
+sqlcl-package (0.1.1) unstable; urgency=low
+
+  * Fixed lintian warnings
+  * Updated debhelper compat version to 11
+  * Verified compliancy with Standards-Version: 4.1.3
+
+ -- Lazarus Long <lazarus.long@sapo.pt>  Wed, 10 Jan 2018 00:01:01 +0000
+
 sqlcl-package (0.1.0) unstable; urgency=low
 
   * Initial Release (Closes: #882113, #882115)
   * This is a specialized application debianization tool which turns Oracle
     SQL Developer Command-Line (SQLcl) into a Debian package, the same way as
-    similar packages like "sqldeveloper-package", "googleearth-package", 
+    similar packages like "sqldeveloper-package", "googleearth-package",
     "sapgui-package", "java-package" and "webserver-package", all native
     packages, do for other applications.
   * Due to a conflicting name with content of package "parallel" the upstream
