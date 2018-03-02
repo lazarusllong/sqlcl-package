@@ -35,6 +35,7 @@ After installing a **compatible** _JRE_ simply launch _SQL Developer Command-Lin
   - [**`sqlcl-package_0.1.1_all.deb`**](https://github.com/lazarusllong/sqlcl-package/releases/download/0.1.1/sqlcl-package_0.1.1_all.deb) (_binary package_)
   - [`sqlcl-package_0.1.1.dsc`](https://github.com/lazarusllong/sqlcl-package/releases/download/0.1.1/sqlcl-package_0.1.1.dsc) (_source description file_)
   - [`sqlcl-package_0.1.1.tar.xz`](https://github.com/lazarusllong/sqlcl-package/releases/download/0.1.1/sqlcl-package_0.1.1.tar.xz) (_source code archive_)
+  - [`v0.1.0_v0.1.1.debdiff`](https://github.com/lazarusllong/sqlcl-package/releases/download/0.1.1/v0.1.0_v0.1.1.debdiff) (_Debian diff from previous version_)
 
 ##### [Version 0.1.0](https://github.com/lazarusllong/sqlcl-package/releases/tag/0.1.0):
 - **changelog:**
