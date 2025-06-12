@@ -609,6 +609,34 @@ func_cleanup() {
 		printf "done!\n"
 	fi
 
+        [ ${SILENT} -eq 0 ] && printf "\tmoving files to better locations ..."
+        # move /bin/ files to user/share
+        for f in bin/dependencies.txt bin/version.txt ${UPSTREAMVER}; do
+                if [ -f "${OPTDIR}/${f}" ] ; then
+			# Ensure target dir exists
+			${MKDIR} ${MKDIR_OPTS} \
+				"${OPTDIR}/share/${PROGNAME}/${UPSTREAMVER}"
+			# Move and fix rights
+                        local dest="${OPTDIR}/share/${PROGNAME}/${UPSTREAMVER}/$(basename "${f}")"
+			${MV} ${MV_OPTS_FUNC_REORG}  \
+				"${OPTDIR}/${f}" \
+				"${OPTDIR}/share/${PROGNAME}/${UPSTREAMVER}"
+                        ${CHMOD} ${CHMOD_OPTS_NOEXEC} "${dest}"
+		fi
+	done
+
+        # move top-level licence files to /usr/share/doc
+	for f in LICENSE.txt NOTICES.txt THIRD-PARTY-LICENSES.txt ; do
+		if [ -f "${OPTDIR}/${f}" ] ; then
+			docdir="${OPTDIR}/share/doc/${PROGNAME}-${UPSTREAMVER}"
+			${MKDIR} ${MKDIR_OPTS} "${docdir}"
+			${MV} ${MV_OPTS_FUNC_CLEAN} "${OPTDIR}/${f}" "${docdir}/"
+			${CHMOD} ${CHMOD_OPTS_NOEXEC} "${docdir}/${f}"
+		fi
+	done
+
+        [ ${SILENT} -eq 0 ] && printf "done!\n"
+
 	# Fixes
 	#
 	if [ ${SILENT} -eq 0 ] ; then
