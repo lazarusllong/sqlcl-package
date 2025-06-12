@@ -1012,7 +1012,6 @@ EOF
         ${CAT} <<EOF
 classpath-contains-relative-path
 missing-manifest
-no-upstream-changelog
 EOF
         ) >"${DEBIAN_WORKDIR}/lintian-overrides"
 
