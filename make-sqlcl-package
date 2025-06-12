@@ -542,9 +542,8 @@ func_reorganize() {
 		exit 1
 	fi
 
-	${MV} ${MV_OPTS_FUNC_REORG} "${OPTDIR}/lib" "${OPTDIR}/${UPSTREAMVER}"
 	${MKDIR} ${MKDIR_OPTS} "${OPTDIR}/share/${PROGNAME}"
-	${MV} ${MV_OPTS_FUNC_REORG} "${OPTDIR}/${UPSTREAMVER}" "${OPTDIR}/share/${PROGNAME}"
+	${MV} ${MV_OPTS_FUNC_REORG} --no-target-directory "${OPTDIR}/lib" "${OPTDIR}/share/${PROGNAME}/${UPSTREAMVER}"
 
 	if [ -f "${OPTDIR}/bin/sql" ] ; then
 		${MV} ${MV_OPTS_FUNC_REORG} "${OPTDIR}/bin/sql" "${OPTDIR}/bin/sql.${UPSTREAMVER}.standalone"
