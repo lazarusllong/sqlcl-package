@@ -432,18 +432,35 @@ func_upstreamversion() {
 		exit 1
 	fi
 
+        # try version.txt first
+        if [ -z "${UPSTREAMVER}" ] && [ -f "${1}/bin/version.txt" ]; then
+                UPSTREAMVER="$(${GREP} ${GREP_OPTS} '^RELEASE=' "${1}/bin/version.txt" | ${CUT} -d= -f2 | ${TR}  -d '[[:space:]]' )"
+        fi
+        # extract version from sqlcl jar file
 	if [ -z "${UPSTREAMVER}" ] ; then
 		local CUT_OPTS_FUNC_UPVER="-d = -f 2"
 		local TR_OPTS_FUNC_UPVER="-d [[:space:]]"
 		local UNZIP_OPTS_FUNC_UPVER="-p"
-		local JARFILE="${1}/${PROGNAME}/lib/oracle.sqldeveloper.sqlcl.jar"
+                # Oracle renamed the jar file, try both
+		if [ -f "${1}/${PROGNAME}/lib/oracle.sqldeveloper.sqlcl.jar" ]; then
+			local JARFILE="${1}/${PROGNAME}/lib/oracle.sqldeveloper.sqlcl.jar"
+		elif [ -f "${1}/${PROGNAME}/lib/dbtools-sqlcl.jar" ]; then
+			local JARFILE="${1}/${PROGNAME}/lib/dbtools-sqlcl.jar"
+		else
+			if [ ${SILENT} -eq 0 ] ; then
+                                printf "\nfunc_upstreamversion(): sqlcl jar not found, aborting...\n" >&2
+                        else
+                                printf "%s - func_upstreamversion(): sqlcl jar not found, aborting...\n" "${INVOCATION}" >&2
+                        fi
+		        exit 1
+		fi
 
 		local VERSTRING="^SQLclVersion.VERSION"
 		local VERTEMP="$(${UNZIP} ${UNZIP_OPTS_FUNC_UPVER} "${JARFILE}" "oracle/dbtools/versions/version.properties" 2>/dev/null)"
 
 		if [ ${#VERTEMP} -eq 0 ] ; then
 			CUT_OPTS_FUNC_UPVER="-d : -f 2"
-			VERSTRING="Release"
+			VERSTRING="Release|Implementation-Version"
 			VERTEMP="$(${UNZIP} ${UNZIP_OPTS_FUNC_UPVER} "${JARFILE}" "META-INF/MANIFEST.MF" 2>/dev/null)"
 		fi
 
@@ -457,18 +474,16 @@ func_upstreamversion() {
 			exit 1
 		fi
 
-		UPSTREAMVER="$(printf "${VERTEMP}" |${GREP} ${GREP_OPTS} "^${VERSTRING}" |${CUT} ${CUT_OPTS_FUNC_UPVER} |${TR} ${TR_OPTS_FUNC_UPVER})"
+		UPSTREAMVER="$(printf '%s' "${VERTEMP}" | ${GREP} ${GREP_OPTS} "^(${VERSTRING})" | ${CUT} ${CUT_OPTS_FUNC_UPVER} | ${TR} ${TR_OPTS_FUNC_UPVER})"
 	fi
 
 	if [ ${SILENT} -eq 0 ] ; then
 		printf "\"%s\" ... " "${UPSTREAMVER}"
 	fi
 
-	UPSTREAMVERMAJ="${UPSTREAMVER%%.*}"
-	UPSTREAMVERMIN="${UPSTREAMVER#*.}"
-	UPSTREAMVERREV="${UPSTREAMVERMIN#*.}"
-	UPSTREAMVERMIN="${UPSTREAMVERMIN%%.*}"
-	UPSTREAMVERREV="${UPSTREAMVERREV%%.*}"
+	UPSTREAMVERMAJ=$(printf '%s\n' "$UPSTREAMVER" | cut -d. -f1)
+	UPSTREAMVERMIN=$(printf '%s\n' "$UPSTREAMVER" | cut -d. -f2)
+	UPSTREAMVERREV=$(printf '%s\n' "$UPSTREAMVER" | cut -d. -f3-)
 
 	if [ -z "${LOCALVER}" ] ; then
 		LOCALVER=1
@@ -647,7 +662,7 @@ func_debianize() {
 	local DATE_OPTS_FUNC_DEB="-R"
 	local DPKG_QUERY_OPTS_VERSION="--showformat=\${Version} --show"
 	local DEBIAN_WORKDIR="${1}/debian"
-	local POSTINST_PRIO=$(printf "%02u%02u%02u" ${UPSTREAMVERMAJ} ${UPSTREAMVERMIN} ${UPSTREAMVERREV})
+	local POSTINST_PRIO=$(printf "%02u%02u%02u" ${UPSTREAMVERMAJ} ${UPSTREAMVERMIN} $(printf '%s' "$UPSTREAMVERREV" | cut -d. -f1 ))
 	${MKDIR} ${MKDIR_OPTS} "${DEBIAN_WORKDIR}"
 
 	if [ ${SILENT} -eq 0 ] ; then
