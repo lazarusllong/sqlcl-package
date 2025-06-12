@@ -1,3 +1,26 @@
+sqlcl-package (0.1.2) unstable; urgency=low
+
+  * Version-detection overhaul for SQLcl ≥ 25.x:
+    - Look for bin/version.txt before JAR inspection.
+    - Accept renamed dbtools-sqlcl.jar in addition to the original
+      oracle.sqldeveloper.sqlcl.jar.
+    - Parse both Release and Implementation-Version manifest headers.
+    - Handle revision strings containing more than two dots.
+
+  * Avoid archive-root name clash: rename the lib directory directly
+    instead of creating a top-level “25.x.x.x” file that collides with
+    the numeric version file in upstream ZIPs.
+
+  * Organise new files in oracle .zip:
+    - Move bin/dependencies.txt, bin/version.txt and the numeric version
+      directory into /usr/share/sqlcl/<ver>/.
+    - Install LICENSE.txt, NOTICES.txt and THIRD-PARTY-LICENSES.txt under
+      /usr/share/doc/sqlcl-<ver>/.
+
+  * Lintian: drop obsolete no-upstream-changelog override.
+
+ -- Petr Ledvina <ledvinap@gmail.com>  Thu, 12 Jun 2025 19:11:00 +0200
+
 sqlcl-package (0.1.1) unstable; urgency=low
 
   * Fixed lintian warnings
